@@ -16,10 +16,8 @@ function SocketProvider({ children }) {
         const token = localStorage.getItem("saylink_token");
         if (!token) return;
 
-        const socketInstance = io("https://saylink-backend.onrender.com", {
-            auth: {
-                token,
-            },
+        const socketInstance = io(import.meta.env.VITE_API_URL, {
+            auth: { token },
             withCredentials: true,
         });
 

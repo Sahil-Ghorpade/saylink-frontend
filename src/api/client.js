@@ -1,4 +1,4 @@
-const BASE_URL = "https://saylink-backend.onrender.com/api";
+const BASE_URL = import.meta.env.VITE_API_URL + "/api";
 
 const apiClient = async (endpoint, options = {}) => {
     const token = localStorage.getItem("saylink_token");
