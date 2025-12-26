@@ -1,0 +1,55 @@
+.feed-post {
+  padding: 0;
+}
+
+.post-image {
+  width: 100%;
+  object-fit: cover;
+}
+
+.post-caption {
+  font-size: 14px;
+  color: #222;
+}
+
+.post-actions {
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #444;
+}
+
+.action-btn i {
+  font-size: 1.3rem;
+}
+
+.action-btn:hover {
+  color: #000;
+}
+
+/* Custom kebab dropdown */
+.custom-dropdown {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  z-index: 100;
+}
+
+.custom-dropdown .dropdown-item {
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+}

@@ -1,0 +1,42 @@
+.single-post-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.post-media {
+    width: 100%;
+    object-fit: cover;
+}
+
+.post-actions {
+    border-top: 1px solid #eee;
+    padding-top: 8px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.custom-dropdown {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  z-index: 100;
+}
+
+.custom-dropdown .dropdown-item {
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+}

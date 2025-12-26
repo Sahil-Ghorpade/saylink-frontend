@@ -1,0 +1,40 @@
+.follow-request-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.follow-request-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.request-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+}
+
+.request-user:hover {
+    text-decoration: underline;
+}
+
+.request-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.request-actions {
+    display: flex;
+    gap: 8px;
+}

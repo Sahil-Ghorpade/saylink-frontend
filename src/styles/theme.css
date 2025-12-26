@@ -1,0 +1,30 @@
+:root {
+    --light-blue: #8ECAE6;
+    --primary-blue: #219EBC;
+    --dark-blue: #023047;
+    --yellow: #FFB703;
+    --orange: #FB8500;
+}
+
+/* Global body styles */
+body {
+    background-color: var(--light-blue);
+    color: var(--dark-blue);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+        sans-serif;
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+.btn-primary:hover {
+    background-color: var(--dark-blue);
+    border-color: var(--dark-blue);
+}
+
+h1, h2, h3, h4, h5 {
+    color: var(--dark-blue);
+}

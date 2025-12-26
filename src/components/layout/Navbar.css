@@ -1,0 +1,96 @@
+.app-navbar {
+    background: var(--dark-blue);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ACTIONS */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.nav-icon {
+    color: white;
+    font-size: 1.2rem;
+    position: relative;
+    text-decoration: none;
+}
+
+.nav-icon.create i {
+    color: var(--yellow);
+    font-size: 1.35rem;
+}
+
+/* NOTIFICATION BADGE */
+.nav-icon.notification .badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: red;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 50%;
+}
+
+/* PROFILE AVATAR */
+.nav-avatar img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--yellow);
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .nav-brand {
+        font-size: 1.2rem;
+    }
+
+    .nav-actions {
+        gap: 14px;
+    }
+}
+
+/* BRAND */
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* LOGO ICON */
+.nav-logo-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+/* LOGO TEXT */
+.nav-logo-text {
+    color: var(--yellow);
+    font-size: 1.2rem;
+}
+
+/* MOBILE — ICON ONLY */
+@media (max-width: 768px) {
+    .nav-logo-text {
+        display: none;
+    }
+}

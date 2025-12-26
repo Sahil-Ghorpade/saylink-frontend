@@ -1,0 +1,43 @@
+.notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #fff;
+    transition: background 0.15s ease;
+}
+
+.notification-item:hover {
+    background: #f8f9fa;
+}
+
+.notification-item.unread {
+    background: #fffaf0;
+}
+
+.notification-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.notification-content {
+    flex: 1;
+    font-size: 14px;
+}
+
+.unread-dot {
+    width: 8px;
+    height: 8px;
+    background: #ffb703;
+    border-radius: 50%;
+}

@@ -1,0 +1,34 @@
+.message-request-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message-request-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  background: #fff;
+}
+
+.request-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.request-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.request-actions {
+  display: flex;
+  gap: 6px;
+}
