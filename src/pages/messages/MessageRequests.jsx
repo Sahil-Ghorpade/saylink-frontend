@@ -31,7 +31,7 @@ function MessageRequests() {
             <div className="message-request-list">
                 {requests.map((c) => {
                     const sender = c.participants.find(
-                        (p) => p._id !== c.requestedBy
+                        (p) => p._id === c.requestedBy
                     );
 
                     return (
