@@ -1,40 +1,22 @@
 import { useNavigate } from "react-router-dom";
+import "./PageHeader.css";
 
 function PageHeader({ title, backTo }) {
     const navigate = useNavigate();
 
     return (
-        <div
-            style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "12px",
-                padding: "12px",
-                background: "#8ECAE6",
-                position: "sticky",
-                top: 0,
-                zIndex: 10,
-            }}
-        >
+        <div className="page-header">
             <button
+                className="page-header-back"
                 onClick={() => {
-                    if (backTo) {
-                        navigate(backTo);
-                    } else {
-                        navigate(-1);
-                    }
+                    if (backTo) navigate(backTo);
+                    else navigate(-1);
                 }}
-                style={{
-                    background: "none",
-                    border: "none",
-                    fontSize: "18px",
-                    cursor: "pointer",
-                }}
+                aria-label="Go back"
             >
-                ←
+                <i className="bi bi-arrow-left"></i>
             </button>
-
-            <h6 className="mb-0">{title}</h6>
+            <span className="page-header-title">{title}</span>
         </div>
     );
 }

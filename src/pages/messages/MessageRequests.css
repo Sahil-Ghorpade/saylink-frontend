@@ -1,34 +1,79 @@
+/* Message Requests UI */
+
 .message-request-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .message-request-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #eee;
-  background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-glass);
+    background: var(--bg-glass-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: var(--shadow-sm);
 }
 
 .request-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  object-fit: cover;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-glass);
+    flex-shrink: 0;
 }
 
 .request-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-primary);
 }
 
 .request-actions {
-  display: flex;
-  gap: 6px;
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.btn-accept {
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: var(--radius-full);
+    border: none;
+    background: var(--accent-emerald);
+    color: #fff;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.btn-accept:hover {
+    background: #0ea572;
+    transform: scale(1.04);
+}
+
+.btn-reject {
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: var(--radius-full);
+    border: 1.5px solid var(--accent-crimson);
+    background: transparent;
+    color: var(--accent-crimson);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.btn-reject:hover {
+    background: rgba(225, 29, 72, 0.12);
+    transform: scale(1.04);
 }

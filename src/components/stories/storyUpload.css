@@ -1,17 +1,71 @@
+/* Modern Glassmorphic Story Upload Modal */
+
 .story-upload-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2000;
+    z-index: 3000;
+    padding: 20px;
+    animation: fadeIn 0.25s ease;
 }
 
 .story-upload-modal {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 400px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-glass);
+    padding: 28px;
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 440px;
+    box-shadow: var(--shadow-lg);
+    color: var(--text-primary);
+}
+
+.story-upload-modal h5 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.story-dropzone {
+    border: 2px dashed rgba(99, 102, 241, 0.4);
+    border-radius: var(--radius-md);
+    padding: 30px 20px;
+    text-align: center;
+    background: rgba(17, 24, 39, 0.5);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.story-dropzone:hover {
+    border-color: var(--accent-pink);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.story-dropzone i {
+    font-size: 2.2rem;
+    color: var(--accent-indigo);
+    margin-bottom: 10px;
+    display: block;
+}
+
+.story-preview-container {
+    max-height: 320px;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-sm);
+}
+
+.story-preview-container img,
+.story-preview-container video {
+    width: 100%;
+    max-height: 320px;
+    object-fit: contain;
+    background: #000;
 }

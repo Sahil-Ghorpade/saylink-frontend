@@ -22,7 +22,6 @@ function Profile() {
     const { showToast } = useContext(ToastContext);
     const [hasActiveStory, setHasActiveStory] = useState(false);
     const [activeStoryGroup, setActiveStoryGroup] = useState(null);
-    const [profileStories, setProfileStories] = useState([]);
     const [hasUnseenStory, setHasUnseenStory] = useState(false);
     const currentUserId = user?._id;
     const [openMenu, setOpenMenu] = useState(false);
@@ -54,16 +53,20 @@ function Profile() {
         if (!socket) return;
 
         socket.on("story_viewed", ({ storyId, viewer }) => {
-            setProfileStories((prev) =>
-                prev.map((s) =>
-                    s._id === storyId
-                        ? {
-                            ...s,
-                            viewers: [...s.viewers, viewer],
-                        }
-                        : s
-                )
-            );
+            setActiveStoryGroup((prev) => {
+                if (!prev) return prev;
+                return {
+                    ...prev,
+                    stories: prev.stories.map((s) =>
+                        s._id === storyId
+                            ? {
+                                ...s,
+                                viewers: [...(s.viewers || []), viewer],
+                            }
+                            : s
+                    ),
+                };
+            });
         });
 
         return () => socket.off("story_viewed");
@@ -93,31 +96,42 @@ function Profile() {
     
     if (loading) {
         return (
-            <div className="container mt-5 text-center">
-                <p>Loading profile...</p>
+            <div className="container mt-5" style={{ maxWidth: "600px" }}>
+                <div className="glass-card p-5 text-center">
+                    <div className="spinner-border text-warning mb-3" role="status"></div>
+                    <p className="text-muted mb-0">Loading profile…</p>
+                </div>
             </div>
         );
     }
 
     if (!profile) {
         return (
-            <div className="container mt-5 text-center">
-                <p>User not found.</p>
+            <div className="container mt-5" style={{ maxWidth: "600px" }}>
+                <div className="glass-card p-5 text-center">
+                    <i className="bi bi-person-x text-muted mb-3 d-block" style={{ fontSize: "2.5rem" }}></i>
+                    <h6 className="fw-semibold mb-1">User not found</h6>
+                    <p className="text-muted mb-0" style={{ fontSize: "13px" }}>This account may have been deleted or never existed.</p>
+                </div>
             </div>
         );
     }
 
     const handleProfileStoryViewed = (storyId) => {
-        setProfileStories((prev) =>
-            prev.map((s) =>
-                s._id === storyId
-                    ? {
-                        ...s,
-                        viewers: [...s.viewers, currentUserId],
-                    }
-                    : s
-            )
-        );
+        setActiveStoryGroup((prev) => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                stories: prev.stories.map((s) =>
+                    s._id === storyId
+                        ? {
+                            ...s,
+                            viewers: [...(s.viewers || []), currentUserId],
+                        }
+                        : s
+                ),
+            };
+        });
     };
 
     const isOwner = currentUserId === profile._id;
@@ -180,8 +194,9 @@ function Profile() {
                         }}
                     >
                         <img
-                            src={profile.profileImage?.url}
+                            src={profile.profileImage?.url || "/default-avatar.svg"}
                             alt="profile"
+                            onError={(e) => { e.target.onerror = null; e.target.src = "/default-avatar.svg"; }}
                         />
                     </div>
 
@@ -203,26 +218,26 @@ function Profile() {
                 </div>
 
                 {/* PART 3 — ACTION BUTTONS */}
-                <div className="profile-actions">
+                <div className="profile-actions d-flex gap-2 mt-3">
                     {currentUserId === profile._id ? (
                         <>
                             <button
-                                className="btn btn-outline-primary"
+                                className="btn btn-outline-light btn-sm rounded-pill px-3"
                                 onClick={() => navigate("/settings")}
                             >
-                                Edit Profile
+                                <i className="bi bi-gear me-1"></i> Edit Profile
                             </button>
                             <button
-                                className="btn btn-warning"
+                                className="gradient-btn btn-sm px-4"
                                 onClick={() => navigate("/create")}
                             >
-                                New Post
+                                <i className="bi bi-plus-lg me-1"></i> New Post
                             </button>
                         </>
                     ) : (
                         <>
                             <button
-                                className="btn btn-outline-primary"
+                                className={isFollowing ? "btn btn-outline-light btn-sm rounded-pill px-4" : "gradient-btn btn-sm px-4"}
                                 onClick={async () => {
                                     try {
                                         const res = await toggleFollow(profile._id);
@@ -237,14 +252,14 @@ function Profile() {
                                     }
                                 }}
                             >
-                                {isFollowing ? "Unfollow" : "Follow"}
+                                {isFollowing ? "Following" : "Follow"}
                             </button>
 
                             <button
-                                className="btn btn-outline-secondary"
+                                className="btn btn-outline-light btn-sm rounded-pill px-3"
                                 onClick={handleMessage}
                             >
-                                Message
+                                <i className="bi bi-chat-dots me-1"></i> Message
                             </button>
                         </>
                     )}
@@ -252,11 +267,19 @@ function Profile() {
 
             </div>
 
-            <h6 className="mb-3">Posts</h6>
+            <div className="d-flex align-items-center justify-content-between mb-3 mt-2">
+                <h6 className="mb-0 fw-bold" style={{ letterSpacing: "0.02em" }}>
+                    <i className="bi bi-grid-3x3 me-2 text-muted"></i>Posts
+                </h6>
+                <span className="text-muted" style={{ fontSize: "13px" }}>{posts.length}</span>
+            </div>
 
             <div className="profile-posts">
                 {posts.length === 0 && !profile.isPrivate && (
-                    <p className="text-muted">No posts yet.</p>
+                    <div className="glass-card p-5 text-center">
+                        <i className="bi bi-images text-muted mb-3 d-block" style={{ fontSize: "2rem" }}></i>
+                        <p className="text-muted mb-0" style={{ fontSize: "13px" }}>No posts yet</p>
+                    </div>
                 )}
 
                 {profile.isPrivate && !relationship?.isFollower && currentUserId !== profile._id ? (
@@ -275,7 +298,12 @@ function Profile() {
                                 <img
                                     src={post.image?.url}
                                     alt="post"
+                                    onError={(e) => { e.target.onerror = null; e.target.src = "/default-avatar.svg"; }}
                                 />
+                                <div className="post-tile-overlay">
+                                    <span><i className="bi bi-heart-fill me-1"></i>{post.likes?.length || 0}</span>
+                                    <span><i className="bi bi-chat-fill me-1"></i>{post.comments?.length || 0}</span>
+                                </div>
                             </div>
                         ))}
                     </div>

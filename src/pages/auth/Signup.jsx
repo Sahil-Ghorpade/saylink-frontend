@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../../components/layout/AuthLayout";
 import { signupUser } from "../../api/auth";
 import { ToastContext } from "../../context/ToastContext";
+import "./Auth.css";
 
 function Signup() {
     const [formData, setFormData] = useState({
@@ -10,7 +11,7 @@ function Signup() {
         email: "",
         password: "",
     });
-
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -24,10 +25,9 @@ function Signup() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-
         try {
             await signupUser(formData);
-            showToast("Account created successfully", "success");
+            showToast("Account created! Welcome to SayLink 🎉", "success");
             setFormData({ username: "", email: "", password: "" });
             navigate("/login");
         } catch (error) {
@@ -38,20 +38,20 @@ function Signup() {
     };
 
     return (
-        <AuthLayout title="Create your account">
-            <p className="text-muted text-center mb-4">
-                Join Saylink and start sharing
+        <AuthLayout title="Create account">
+            <p className="text-muted text-center mb-4" style={{ fontSize: "14px" }}>
+                Join SayLink and start connecting
             </p>
 
             <form onSubmit={handleSubmit} noValidate>
                 {/* USERNAME */}
                 <div className="mb-3">
-                    <label className="form-label fw-semibold">
-                        Username
+                    <label className="auth-label">
+                        <i className="bi bi-at me-2"></i>Username
                     </label>
                     <input
                         type="text"
-                        className="form-control"
+                        className="auth-input"
                         placeholder="Choose a unique username"
                         name="username"
                         value={formData.username}
@@ -62,12 +62,12 @@ function Signup() {
 
                 {/* EMAIL */}
                 <div className="mb-3">
-                    <label className="form-label fw-semibold">
-                        Email address
+                    <label className="auth-label">
+                        <i className="bi bi-envelope me-2"></i>Email address
                     </label>
                     <input
                         type="email"
-                        className="form-control"
+                        className="auth-input"
                         placeholder="you@example.com"
                         name="email"
                         value={formData.email}
@@ -77,38 +77,57 @@ function Signup() {
                 </div>
 
                 {/* PASSWORD */}
-                <div className="mb-3">
-                    <label className="form-label fw-semibold">
-                        Password
+                <div className="mb-4">
+                    <label className="auth-label">
+                        <i className="bi bi-lock me-2"></i>Password
                     </label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        placeholder="Create a strong password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
+                    <div className="auth-input-group">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            className="auth-input"
+                            placeholder="Create a strong password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                        />
+                        <button
+                            type="button"
+                            className="auth-eye-btn"
+                            onClick={() => setShowPassword(p => !p)}
+                            tabIndex={-1}
+                        >
+                            <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                        </button>
+                    </div>
                 </div>
 
                 {/* SUBMIT */}
                 <button
                     type="submit"
-                    className="btn btn-primary w-100 py-2"
+                    className="gradient-btn w-100 py-2"
                     disabled={loading}
                 >
-                    {loading ? "Creating account…" : "Sign up"}
+                    {loading ? (
+                        <>
+                            <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                            Creating account…
+                        </>
+                    ) : (
+                        <>
+                            <i className="bi bi-person-plus me-2"></i>Create Account
+                        </>
+                    )}
                 </button>
             </form>
 
             {/* FOOTER */}
             <div className="text-center mt-4">
-                <span className="text-muted">
-                    Already have an account?
-                </span>{" "}
-                <Link to="/login" className="fw-semibold">
-                    Login
+                <span className="text-muted" style={{ fontSize: "13px" }}>
+                    Already have an account?{" "}
+                </span>
+                <Link to="/login" className="auth-link fw-semibold">
+                    Sign in
                 </Link>
             </div>
         </AuthLayout>

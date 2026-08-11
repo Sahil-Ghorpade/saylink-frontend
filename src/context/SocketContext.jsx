@@ -21,10 +21,9 @@ function SocketProvider({ children }) {
             withCredentials: true,
         });
 
-        setSocket(socketInstance);
-
         socketInstance.on("connect", () => {
             console.log("Socket connected:", socketInstance.id);
+            setSocket(socketInstance);
         });
 
         socketInstance.on("new_notification", (notification) => {
@@ -41,13 +40,14 @@ function SocketProvider({ children }) {
 
         socketInstance.on("disconnect", () => {
             console.log("Socket disconnected");
+            setSocket(null);
         });
 
         return () => {
             socketInstance.disconnect();
             setSocket(null);
         };
-    }, [isAuthenticated]);
+    }, [isAuthenticated, addNotification, removeNotification]);
 
     return (
         <SocketContext.Provider value={socket}>

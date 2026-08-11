@@ -63,15 +63,14 @@ function SinglePost() {
                             className="d-flex align-items-center text-decoration-none"
                         >
                             <img
-                                src={post.author.profileImage?.url}
+                                src={post.author?.profileImage?.url || "/default-avatar.svg"}
                                 alt="profile"
-                                className="rounded-circle me-2"
-                                width="40"
-                                height="40"
+                                className="post-avatar me-2"
+                                onError={(e) => { e.target.onerror = null; e.target.src = "/default-avatar.svg"; }}
                             />
-                            <strong className="text-dark">
+                            <span className="post-username">
                                 @{post.author.username}
-                            </strong>
+                            </span>
                         </Link>
 
                         {isOwner && (

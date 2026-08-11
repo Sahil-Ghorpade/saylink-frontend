@@ -1,0 +1,51 @@
+/* PageHeader — Global Back Navigation Component */
+
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border-glass);
+    background: transparent;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.page-header-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-glass);
+    color: var(--text-primary);
+    font-size: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: var(--transition-fast);
+}
+
+.page-header-back:hover {
+    background: var(--bg-glass-hover);
+    border-color: var(--primary-accent);
+    color: var(--primary-accent);
+    transform: scale(1.05);
+}
+
+.page-header-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.01em;
+}
+
+/* Light theme */
+[data-theme="light"] .page-header {
+    background: rgba(250, 248, 245, 0.85);
+}

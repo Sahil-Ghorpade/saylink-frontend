@@ -40,7 +40,7 @@ function CommentPanel({ post, onClose, onUpdate }) {
 
     useEffect(() => {
         setComments(post.comments || []);
-    }, [post._id]);
+    }, [post._id, post.comments]);
 
     const handleSubmit = async () => {
         if (!text.trim()) return;
@@ -100,7 +100,7 @@ function CommentPanel({ post, onClose, onUpdate }) {
                                 <img
                                     src={
                                         c.author.profileImage?.url ||
-                                        "/default-avatar.png"
+                                        "/default-avatar.svg"
                                     }
                                     alt="avatar"
                                     className="comment-avatar"

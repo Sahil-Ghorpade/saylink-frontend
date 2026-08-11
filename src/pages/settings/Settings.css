@@ -1,0 +1,133 @@
+/* Settings Page UI */
+
+.settings-section {
+    background: var(--bg-glass-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+.settings-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+/* Avatar row */
+.settings-avatar-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.settings-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--border-glass);
+    flex-shrink: 0;
+    transition: var(--transition-fast);
+}
+
+.btn-change-photo {
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-accent);
+    background: transparent;
+    border: 1.5px solid var(--primary-accent);
+    padding: 5px 14px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.btn-change-photo:hover {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+/* Form fields */
+.settings-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.settings-input {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-glass);
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    font-size: 14px;
+    outline: none;
+    transition: var(--transition-fast);
+    resize: none;
+    font-family: inherit;
+}
+
+.settings-input:focus {
+    border-color: var(--primary-accent);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+.settings-input::placeholder {
+    color: var(--text-muted);
+}
+
+.settings-hint {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.settings-hint.warn {
+    color: var(--accent-amber);
+}
+
+/* Privacy toggle row */
+.settings-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.settings-switch {
+    width: 2.5em;
+    height: 1.3em;
+    cursor: pointer;
+}
+
+.settings-switch:checked {
+    background-color: var(--primary-accent);
+    border-color: var(--primary-accent);
+}
+
+/* Light theme overrides */
+[data-theme="light"] .settings-input {
+    background: #f4f4f0;
+    border-color: rgba(0, 0, 0, 0.12);
+    color: #141416;
+}
+
+[data-theme="light"] .settings-input:focus {
+    background: #fff;
+}

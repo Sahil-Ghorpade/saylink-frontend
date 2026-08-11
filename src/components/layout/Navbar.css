@@ -1,18 +1,46 @@
 .app-navbar {
-    background: var(--dark-blue);
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-sm);
 }
 
 .nav-inner {
-    max-width: 1100px;
+    max-width: 1040px;
     margin: 0 auto;
-    padding: 10px 16px;
+    padding: 10px 18px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+/* BRAND */
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.nav-brand:hover {
+    opacity: 0.9;
+}
+
+.nav-logo-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+.nav-logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
 }
 
 /* ACTIONS */
@@ -23,74 +51,82 @@
 }
 
 .nav-icon {
-    color: white;
+    color: var(--text-secondary);
     font-size: 1.2rem;
     position: relative;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    transition: var(--transition-fast);
 }
 
-.nav-icon.create i {
-    color: var(--yellow);
-    font-size: 1.35rem;
+.nav-icon:hover {
+    color: var(--text-primary);
+    background: var(--border-glass-hover);
+}
+
+.nav-icon.create {
+    color: var(--accent-emerald);
+}
+
+.nav-icon.create:hover {
+    color: #ffffff;
+    background: var(--accent-emerald);
 }
 
 /* NOTIFICATION BADGE */
-.nav-icon.notification .badge {
+.nav-icon.notification .badge-glow {
     position: absolute;
-    top: -6px;
-    right: -6px;
-    background: red;
-    color: white;
+    top: 3px;
+    right: 3px;
+    background: var(--accent-crimson);
+    color: #ffffff;
     font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 50%;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: var(--radius-full);
 }
 
 /* PROFILE AVATAR */
-.nav-avatar img {
-    width: 28px;
-    height: 28px;
+.avatar-ring {
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--yellow);
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
-    .nav-brand {
-        font-size: 1.2rem;
-    }
-
-    .nav-actions {
-        gap: 14px;
-    }
-}
-
-/* BRAND */
-.nav-brand {
+    padding: 1.5px;
+    background: var(--primary-gradient);
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-weight: 600;
-    text-decoration: none;
+    justify-content: center;
+    transition: var(--transition-fast);
 }
 
-/* LOGO ICON */
-.nav-logo-icon {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
+.avatar-ring:hover {
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
 }
 
-/* LOGO TEXT */
-.nav-logo-text {
-    color: var(--yellow);
-    font-size: 1.2rem;
+.avatar-ring img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--bg-surface);
 }
 
-/* MOBILE — ICON ONLY */
+/* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
+    .nav-inner {
+        padding: 10px 14px;
+    }
+    
+    .nav-actions {
+        gap: 12px;
+    }
+    
     .nav-logo-text {
-        display: none;
+        font-size: 1.15rem;
     }
 }

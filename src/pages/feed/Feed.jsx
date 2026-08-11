@@ -1,12 +1,13 @@
 import { useEffect, useState, useContext, useRef } from "react";
-import { fetchFeed, toggleLike, addComment, deletePost, deleteComment } from "../../api/posts";
+import { fetchFeed, toggleLike, deletePost } from "../../api/posts";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import StoriesRow from "../../components/stories/StoriesRow";
 import StoryViewer from "../../components/stories/StoryViewer";
 import StoryUpload from "../../components/stories/StoryUpload";
 import SharePostModal from "../../components/share/SharePostModal";
-import { fetchStoryFeed, createStory } from "../../api/stories";
+import ConfirmModal from "../../components/common/ConfirmModal";
+import { fetchStoryFeed } from "../../api/stories";
 import { SocketContext } from "../../context/SocketContext";
 import { ToastContext } from "../../context/ToastContext";
 import CommentPanel from "../../components/comments/CommentPanel";
@@ -25,6 +26,7 @@ function Feed() {
     const [sharePostId, setSharePostId] = useState(null);
     const [openMenuPostId, setOpenMenuPostId] = useState(null);
     const [activeCommentPost, setActiveCommentPost] = useState(null);
+    const [confirmDeletePostId, setConfirmDeletePostId] = useState(null);
     const pageRef = useRef(1);
     const fetchingRef = useRef(false);
     const { showToast } = useContext(ToastContext);
@@ -136,7 +138,7 @@ function Feed() {
                 s._id === storyId
                     ? {
                         ...s,
-                        viewers: [...s.viewers, user.id],
+                        viewers: [...(s.viewers || []), user?._id],
                     }
                     : s
             )
@@ -169,15 +171,21 @@ function Feed() {
             )}
 
             {loading && (
-                <div className="text-center mb-3">
-                    <p>Loading feed...</p>
+                <div className="glass-card p-5 text-center mb-4">
+                    <div className="spinner-border text-warning mb-2" role="status"></div>
+                    <p className="text-muted mb-0">Loading your feed…</p>
                 </div>
             )}
 
             {posts.length === 0 && !loading && (
-                <p className="text-muted text-center mt-4">
-                    No posts yet. Start following users to see their posts.
-                </p>
+                <div className="glass-card p-5 text-center my-4">
+                    <i className="bi bi-people-fill text-muted fs-1 mb-2 d-block"></i>
+                    <h5 className="fw-bold mb-1">Your feed is quiet</h5>
+                    <p className="text-muted mb-3">Follow creators and friends to see their latest posts and stories.</p>
+                    <Link to="/search" className="gradient-btn btn-sm px-4">
+                        <i className="bi bi-search me-1"></i> Find People to Follow
+                    </Link>
+                </div>
             )}
 
             {posts.map((post) => {
@@ -187,7 +195,6 @@ function Feed() {
                     <div
                         key={post._id}
                         className="card mb-4 feed-post"
-                        style={{ borderColor: "#8ECAE6" }}
                     >
                         <div className="card-body">
 
@@ -198,13 +205,12 @@ function Feed() {
                                     className="d-flex align-items-center text-decoration-none"
                                 >
                                     <img
-                                        src={post.author.profileImage?.url}
+                                        src={post.author?.profileImage?.url || "/default-avatar.svg"}
                                         alt="profile"
-                                        className="rounded-circle me-2"
-                                        width="40"
-                                        height="40"
+                                        className="post-avatar me-2"
+                                        onError={(e) => { e.target.onerror = null; e.target.src = "/default-avatar.svg"; }}
                                     />
-                                    <span className="fw-bold text-dark">
+                                    <span className="post-username">
                                         @{post.author.username}
                                     </span>
                                 </Link>
@@ -212,7 +218,7 @@ function Feed() {
                                 {isOwner && (
                                     <div className="position-relative">
                                         <button
-                                            className="btn btn-sm btn-light"
+                                            className="btn btn-sm text-secondary bg-transparent border-0"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 setOpenMenuPostId(
@@ -226,25 +232,13 @@ function Feed() {
                                         {openMenuPostId === post._id && (
                                             <div className="custom-dropdown">
                                                 <button
-                                                    className="dropdown-item text-danger"
-                                                    onClick={async () => {
-                                                        const confirmDelete = window.confirm(
-                                                            "Delete this post?"
-                                                        );
-                                                        if (!confirmDelete) return;
-
-                                                        try {
-                                                            await deletePost(post._id);
-                                                            setPosts(prev =>
-                                                                prev.filter(p => p._id !== post._id)
-                                                            );
-                                                            setOpenMenuPostId(null);
-                                                        } catch {
-                                                            showToast("Failed to delete post", "error");
-                                                        }
+                                                    className="dropdown-item"
+                                                    onClick={() => {
+                                                        setConfirmDeletePostId(post._id);
+                                                        setOpenMenuPostId(null);
                                                     }}
                                                 >
-                                                    Delete
+                                                    <i className="bi bi-trash me-2"></i>Delete
                                                 </button>
                                             </div>
                                         )}
@@ -377,8 +371,28 @@ function Feed() {
                 />
             )}
 
+            {confirmDeletePostId && (
+                <ConfirmModal
+                    message="Delete this post? This can't be undone."
+                    confirmLabel="Delete Post"
+                    onConfirm={async () => {
+                        try {
+                            await deletePost(confirmDeletePostId);
+                            setPosts(prev => prev.filter(p => p._id !== confirmDeletePostId));
+                            showToast("Post deleted", "success");
+                        } catch {
+                            showToast("Failed to delete post", "error");
+                        } finally {
+                            setConfirmDeletePostId(null);
+                        }
+                    }}
+                    onCancel={() => setConfirmDeletePostId(null)}
+                    danger={true}
+                />
+            )}
+
         </div>
     );
 }
 
-export default Feed;
+export default Feed;

@@ -9,24 +9,27 @@ function CreatePostPage() {
 
     return (
         <div className="container mt-4" style={{ maxWidth: "600px" }}>
-            {/* HEADER */}
-            <div className="d-flex align-items-center mb-3">
-                <button
-                    className="btn btn-light me-2"
-                    onClick={() => navigate(-1)}
-                >
-                    ←
-                </button>
-                <h5 className="mb-0">Create Post</h5>
-            </div>
+            <div className="glass-card p-4">
+                {/* HEADER */}
+                <div className="d-flex align-items-center mb-4 pb-3 border-bottom border-glass">
+                    <button
+                        className="btn btn-outline-light btn-sm rounded-circle me-3"
+                        onClick={() => navigate(-1)}
+                        style={{ width: "36px", height: "36px" }}
+                    >
+                        <i className="bi bi-arrow-left"></i>
+                    </button>
+                    <h5 className="mb-0 fw-bold">Create New Post</h5>
+                </div>
 
-            {/* CREATE POST */}
-            <CreatePost
-                onPostCreated={() => {
-                    showToast("Post created successfully", "success");
-                    navigate("/feed");
-                }}
-            />
+                {/* CREATE POST FORM */}
+                <CreatePost
+                    onPostCreated={() => {
+                        showToast("Post published successfully!", "success");
+                        navigate("/feed");
+                    }}
+                />
+            </div>
         </div>
     );
 }

@@ -148,7 +148,13 @@ function Chat() {
 
             <div className="chat-container">
                 {/* HEADER */}
-                <PageHeader title="Chat" backTo="/messages" />
+                {(() => {
+                    const otherUser = conversation?.participants?.find(
+                        (p) => p._id !== user?._id
+                    );
+                    const title = otherUser ? `@${otherUser.username}` : "Chat";
+                    return <PageHeader title={title} backTo="/messages" />;
+                })()}
 
                 {/* SCROLLABLE MESSAGES */}
                 <div className="chat-messages" ref={messagesRef}>
@@ -185,7 +191,9 @@ function Chat() {
 
                     {typingUser && (
                         <div className="typing-indicator">
-                            Typing…
+                            <span className="typing-dot"></span>
+                            <span className="typing-dot"></span>
+                            <span className="typing-dot"></span>
                         </div>
                     )}
                 </div>
@@ -201,6 +209,13 @@ function Chat() {
                             handleTyping();
                         }}
                     />
+                    <button
+                        type="submit"
+                        className="chat-send-btn"
+                        disabled={!text.trim()}
+                    >
+                        <i className="bi bi-send-fill"></i>
+                    </button>
                 </form>
             </div>
         </div>

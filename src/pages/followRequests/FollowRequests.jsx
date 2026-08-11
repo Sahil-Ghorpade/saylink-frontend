@@ -28,20 +28,22 @@ function FollowRequests() {
 
     if (loading) {
         return (
-            <p className="text-center mt-4 text-muted">
-                Loading follow requests…
-            </p>
+            <div className="container mt-5 text-center" style={{ maxWidth: "500px" }}>
+                <div className="spinner-border text-warning" role="status"></div>
+                <p className="mt-2 text-muted">Loading follow requests…</p>
+            </div>
         );
     }
 
     return (
-        <div className="container mt-4" style={{ maxWidth: "500px" }}>
-            <h4 className="mb-4">Follow Requests</h4>
+        <div className="container mt-4" style={{ maxWidth: "520px" }}>
+            <h4 className="mb-4 fw-bold">Follow Requests</h4>
 
             {requests.length === 0 && (
-                <p className="text-muted text-center">
-                    No follow requests right now
-                </p>
+                <div className="glass-card p-5 text-center">
+                    <i className="bi bi-person-check text-muted fs-1 mb-2 d-block"></i>
+                    <p className="text-muted mb-0">No follow requests right now</p>
+                </div>
             )}
 
             <div className="follow-request-list">
@@ -54,34 +56,38 @@ function FollowRequests() {
                             <img
                                 src={
                                     user.profileImage?.url ||
-                                    "/default-avatar.png"
+                                    "/default-avatar.svg"
                                 }
                                 alt="avatar"
                                 className="request-avatar"
+                                onError={(e) => { e.target.onerror = null; e.target.src = "/default-avatar.svg"; }}
                             />
-                            <span>@{user.username}</span>
+                            <div>
+                                <span className="d-block fw-bold text-light">@{user.username}</span>
+                                <small className="text-muted">{user.name || "User"}</small>
+                            </div>
                         </Link>
 
                         {/* Actions */}
                         <div className="request-actions">
                             <button
-                                className="btn btn-sm btn-success"
+                                className="btn-accept"
                                 onClick={async () => {
                                     await acceptFollowRequest(user._id);
                                     loadRequests();
                                 }}
                             >
-                                Accept
+                                Confirm
                             </button>
 
                             <button
-                                className="btn btn-sm btn-outline-danger"
+                                className="btn-reject"
                                 onClick={async () => {
                                     await rejectFollowRequest(user._id);
                                     loadRequests();
                                 }}
                             >
-                                Reject
+                                Delete
                             </button>
                         </div>
                     </div>

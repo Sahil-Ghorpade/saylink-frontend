@@ -9,20 +9,23 @@ import AuthProvider from "./context/AuthContext.jsx";
 import ToastProvider from "./context/ToastContext.jsx";
 import SocketProvider from "./context/SocketContext";
 import NotificationProvider from './context/NotificationContext.jsx';
+import ThemeProvider from './context/ThemeContext.jsx';
 import ErrorBoundary from './components/common/ErrorBoundary.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider>
-      <ToastProvider>
-        <NotificationProvider>
-          <SocketProvider>
-            <ErrorBoundary>
-              <App />
-            </ErrorBoundary>
-        </SocketProvider>
-        </NotificationProvider>
-      </ToastProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <ToastProvider>
+          <NotificationProvider>
+            <SocketProvider>
+              <ErrorBoundary>
+                <App />
+              </ErrorBoundary>
+            </SocketProvider>
+          </NotificationProvider>
+        </ToastProvider>
+      </AuthProvider>
+    </ThemeProvider>
   </StrictMode>,
 );

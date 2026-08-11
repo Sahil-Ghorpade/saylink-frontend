@@ -1,212 +1,326 @@
+/* StoryViewer — Full-screen story modal */
+
 .story-viewer {
     position: fixed;
     inset: 0;
-    background: black;
+    background: #000;
     z-index: 2000;
-    color: white;
+    color: #fff;
     overflow: hidden;
     touch-action: manipulation;
 }
 
+/* ── Close button ── */
 .story-close {
     position: absolute;
     top: 16px;
     right: 16px;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 26px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     z-index: 50;
+    transition: all 0.15s ease;
 }
 
+.story-close:hover {
+    background: rgba(225, 29, 72, 0.5);
+}
+
+/* ── Delete button ── */
 .story-delete {
     position: absolute;
     top: 16px;
-    right: 60px;
-    background: none;
-    border: none;
-    color: #ff6b6b;
-    font-size: 14px;
+    right: 66px;
+    background: rgba(225, 29, 72, 0.18);
+    border: 1px solid rgba(225, 29, 72, 0.45);
+    color: #fca5a5;
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
     cursor: pointer;
     z-index: 50;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
 }
 
+.story-delete:hover {
+    background: rgba(225, 29, 72, 0.45);
+    color: #fff;
+}
+
+/* ── Top bar ── */
 .story-top {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    padding: 10px 12px;
+    padding: 14px 16px 20px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.75) 0%, transparent 100%);
     z-index: 40;
 }
 
+/* ── Progress bars ── */
 .story-progress {
     display: flex;
-    gap: 4px;
-    margin-bottom: 10px;
+    gap: 5px;
+    margin-bottom: 12px;
 }
 
 .story-progress-bar {
     flex: 1;
     height: 3px;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255,255,255,0.25);
     border-radius: 2px;
     overflow: hidden;
 }
 
 .story-progress-fill {
     height: 100%;
-    background: white;
+    background: #fff;
     width: 0%;
-    transition: width 0.15s linear;
+    transition: width 0.1s linear;
 }
 
+/* ── Story header (avatar + name) ── */
 .story-header {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .story-header img {
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.6);
+    flex-shrink: 0;
 }
 
-.story-header strong {
+.story-header-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.story-username {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
+    color: #ffffff !important;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    line-height: 1.2;
 }
 
 .story-time {
-    font-size: 12px;
-    opacity: 0.8;
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 1px;
 }
 
+/* ── Nav zones ── */
 .story-nav {
     position: absolute;
     top: 0;
     height: 100%;
-    width: 50%;
+    width: 35%;
     z-index: 20;
+    cursor: pointer;
 }
 
-.story-nav.left {
-    left: 0;
-}
+.story-nav.left { left: 0; }
+.story-nav.right { right: 0; }
 
-.story-nav.right {
-    right: 0;
-}
-
+/* ── Media ── */
 .story-media-wrapper {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
 }
 
 .story-media {
     max-width: 100%;
-    max-height: 100%;
+    max-height: 100vh;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
 }
 
-.story-views {
+/* ── Hold hint ── */
+.story-hold-hint {
     position: absolute;
-    bottom: 70px;
+    bottom: 120px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 14px;
-    cursor: pointer;
-    z-index: 30;
-    opacity: 0.9;
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    pointer-events: none;
+    white-space: nowrap;
 }
 
+/* ── Pause icon ── */
+.story-pause-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 56px;
+    color: rgba(255,255,255,0.7);
+    z-index: 45;
+    pointer-events: none;
+    animation: fadeIn 0.15s ease;
+}
+
+/* ── View count ── */
+.story-views {
+    position: absolute;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    z-index: 30;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+}
+
+.story-views:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+/* ── Viewers sheet ── */
 .viewers-sheet {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0,0,0,0.6);
     z-index: 3000;
     display: flex;
     align-items: flex-end;
 }
 
 .viewers-sheet-content {
-    background: white;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-glass);
     width: 100%;
     max-height: 55%;
-    border-top-left-radius: 18px;
-    border-top-right-radius: 18px;
-    padding: 16px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding: 8px 20px 24px;
     overflow-y: auto;
-    color: black;
+    color: var(--text-primary);
+    animation: slideUp 0.25s ease;
+}
+
+.viewers-sheet-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--border-glass-hover);
+    border-radius: 2px;
+    margin: 8px auto 16px;
 }
 
 .viewers-sheet-content h6 {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+    font-weight: 700;
 }
 
 .viewer-row {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 12px;
+    margin-bottom: 12px;
 }
 
 .viewer-row img {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     object-fit: cover;
 }
 
+/* ── Reply bar ── */
 .story-reply {
     position: absolute;
-    bottom: 14px;
-    left: 14px;
-    right: 14px;
+    bottom: 20px;
+    left: 16px;
+    right: 16px;
     z-index: 40;
 }
 
 .story-reply form {
     display: flex;
-    gap: 8px;
+    gap: 10px;
+    align-items: center;
 }
 
 .story-reply input {
     flex: 1;
-    padding: 10px 12px;
-    border-radius: 20px;
-    border: none;
-    outline: none;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
     font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.story-reply input::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+
+.story-reply input:focus {
+    border-color: rgba(245, 158, 11, 0.7);
 }
 
 .story-reply button {
-    padding: 0 16px;
-    border-radius: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
     border: none;
-    background: #219ebc;
-    color: white;
-    font-size: 14px;
+    background: var(--primary-gradient);
+    color: #fff;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
 }
 
 .story-reply button:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
+    box-shadow: none;
 }
 
-@media (max-width: 600px) {
-    .story-header strong {
-        font-size: 13px;
-    }
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
 
-    .story-reply input {
-        font-size: 13px;
-    }
+@keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }

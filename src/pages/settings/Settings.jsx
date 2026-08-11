@@ -1,9 +1,10 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { updateSettings } from "../../api/user";
 import { ToastContext } from "../../context/ToastContext";
 import PageHeader from "../../components/comments/PageHeader";
 import { useNavigate } from "react-router-dom";
+import "./Settings.css";
 
 function Settings() {
     const { user, updateUser } = useContext(AuthContext);
@@ -15,31 +16,23 @@ function Settings() {
     const [loading, setLoading] = useState(false);
     const { showToast } = useContext(ToastContext);
     const navigate = useNavigate();
+    const fileInputRef = useRef(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-            if (username.trim() === user.username) {
-        showToast("Username unchanged", "info");
-    }
         const formData = new FormData();
         formData.append("name", name);
         formData.append("username", username);
         formData.append("bio", bio);
         formData.append("isPrivate", isPrivate);
-
-        if (image) {
-            formData.append("profileImage", image);
-        }
+        if (image) formData.append("profileImage", image);
 
         try {
             setLoading(true);
             const data = await updateSettings(formData);
-
             updateUser(data.user);
-            showToast("Settings updated successfully", "success");
-
+            showToast("Profile updated! ✨", "success");
             navigate(`/profile/${data.user.username}`);
-
         } catch (err) {
             showToast(err.message || "Something went wrong", "error");
         } finally {
@@ -54,108 +47,144 @@ function Settings() {
         isPrivate === user.isPrivate &&
         !image;
 
-useEffect(() => {
-    setUsername(user.username || "");
-    setName(user.name || "");
-    setBio(user.bio || "");
-    setIsPrivate(user.isPrivate || false);
-}, [user]);
+    useEffect(() => {
+        setUsername(user.username || "");
+        setName(user.name || "");
+        setBio(user.bio || "");
+        setIsPrivate(user.isPrivate || false);
+    }, [user]);
 
+    const avatarSrc = image ? URL.createObjectURL(image) : (user.profileImage?.url || "/default-avatar.svg");
 
     return (
-        <div className="container mt-4" style={{ maxWidth: "500px" }}>
+        <div className="container mt-4" style={{ maxWidth: "520px" }}>
             <PageHeader title="Back to profile" />
 
-            <h4 className="mb-4">Settings</h4>
+            <h4 className="mb-4 fw-bold">Edit Profile</h4>
 
             <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label className="form-label">Username</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={username}    
-                        onChange={(e) =>
-                                setUsername(e.target.value.replace(/\s/g, ""))
-                            }
-                        placeholder="Username"
-                    />
-                    {username !== user.username && (
-                        <small className="text-warning">
-                            Changing username will update your profile URL
-                        </small>
-                    )}
-                    {username === user.username && (
-                        <small className="text-muted">
-                            Current username
-                        </small>
-                    )}
-                </div>
 
-                <div className="mb-3">
-                    <label className="form-label">Name</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Your name"
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label d-flex justify-content-between">
-                        <span>Bio</span>
-                        <small className="text-muted">{bio.length}/150</small>
-                    </label>
-                    <textarea
-                        className="form-control"
-                        maxLength={150}
-                        value={bio}
-                        onChange={(e) => setBio(e.target.value)}
-                    />
-                </div>
-
-                <div className="border rounded p-3 mb-3">
-                    <div className="form-check form-switch">
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={isPrivate}
-                            onChange={(e) => setIsPrivate(e.target.checked)}
+                {/* — AVATAR SECTION — */}
+                <div className="settings-section mb-4">
+                    <div className="settings-avatar-row">
+                        <img
+                            src={avatarSrc}
+                            alt="profile preview"
+                            className="settings-avatar"
+                            onError={(e) => { e.target.onerror = null; e.target.src = "/default-avatar.svg"; }}
                         />
-                        <label className="form-check-label fw-semibold">
-                            Private Account
-                        </label>
+                        <div>
+                            <p className="mb-1 fw-semibold" style={{ fontSize: "15px" }}>
+                                {user.name || user.username}
+                            </p>
+                            <button
+                                type="button"
+                                className="btn-change-photo"
+                                onClick={() => fileInputRef.current?.click()}
+                            >
+                                <i className="bi bi-camera me-1"></i>
+                                {image ? "Change again" : "Change photo"}
+                            </button>
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                style={{ display: "none" }}
+                                onChange={(e) => setImage(e.target.files[0])}
+                            />
+                            {image && (
+                                <span className="text-muted ms-2" style={{ fontSize: "12px" }}>
+                                    {image.name}
+                                </span>
+                            )}
+                        </div>
                     </div>
-                    <small className="text-muted">
-                        Only approved followers can see your posts
-                    </small>
                 </div>
 
-                <div className="mb-3">
-                    <img
-                        src={image ? URL.createObjectURL(image) : user.profileImage?.url}
-                        alt="profile preview"
-                        className="rounded-circle mb-2"
-                        width="90"
-                        height="90"
-                        style={{ objectFit: "cover" }}
-                    />
+                {/* — PROFILE INFO — */}
+                <div className="settings-section mb-3">
+                    <h6 className="settings-section-title">Profile Info</h6>
+
+                    <div className="settings-field mb-3">
+                        <label className="settings-label">Name</label>
+                        <input
+                            type="text"
+                            className="settings-input"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Your display name"
+                        />
+                    </div>
+
+                    <div className="settings-field mb-3">
+                        <label className="settings-label">Username</label>
+                        <input
+                            type="text"
+                            className="settings-input"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value.replace(/\s/g, ""))}
+                            placeholder="Username"
+                        />
+                        {username !== user.username && (
+                            <small className="settings-hint warn">
+                                <i className="bi bi-exclamation-triangle me-1"></i>
+                                Changing username will update your profile URL
+                            </small>
+                        )}
+                    </div>
+
+                    <div className="settings-field">
+                        <label className="settings-label d-flex justify-content-between">
+                            <span>Bio</span>
+                            <span className="text-muted">{bio.length}/150</span>
+                        </label>
+                        <textarea
+                            className="settings-input"
+                            maxLength={150}
+                            rows={3}
+                            value={bio}
+                            onChange={(e) => setBio(e.target.value)}
+                            placeholder="Write something about yourself…"
+                        />
+                    </div>
                 </div>
 
-                <div className="mb-3">
-                    <label className="form-label">Profile Photo</label>
-                    <input
-                        type="file"
-                        className="form-control"
-                        accept="image/*"
-                        onChange={(e) => setImage(e.target.files[0])}
-                    />
+                {/* — PRIVACY — */}
+                <div className="settings-section mb-4">
+                    <h6 className="settings-section-title">Privacy</h6>
+
+                    <div className="settings-toggle-row">
+                        <div>
+                            <p className="mb-0 fw-semibold" style={{ fontSize: "14px" }}>Private Account</p>
+                            <small className="text-muted">Only approved followers can see your posts</small>
+                        </div>
+                        <div className="form-check form-switch mb-0">
+                            <input
+                                className="form-check-input settings-switch"
+                                type="checkbox"
+                                checked={isPrivate}
+                                onChange={(e) => setIsPrivate(e.target.checked)}
+                            />
+                        </div>
+                    </div>
                 </div>
 
-                <button className="btn btn-warning w-100" disabled={loading || isUnchanged}>
-                    {loading ? "Saving..." : "Save Changes"}
+                {/* — SAVE — */}
+                <button
+                    type="submit"
+                    className="gradient-btn w-100 py-2"
+                    disabled={loading || isUnchanged}
+                >
+                    {loading ? (
+                        <>
+                            <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                            Saving…
+                        </>
+                    ) : (
+                        <>
+                            <i className="bi bi-check-lg me-2"></i>Save Changes
+                        </>
+                    )}
                 </button>
             </form>
         </div>
