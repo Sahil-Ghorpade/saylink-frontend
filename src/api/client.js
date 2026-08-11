@@ -23,8 +23,15 @@ const apiClient = async (endpoint, options = {}) => {
     }
 
     if (!response.ok) {
+        if (response.status === 401) {
+            localStorage.removeItem("saylink_token");
+            localStorage.removeItem("saylink_user");
+            if (window.location.pathname !== "/login" && window.location.pathname !== "/signup") {
+                window.location.href = "/login";
+            }
+        }
         throw new Error(
-            typeof data === "string" ? "Server error" : data.message
+            typeof data === "string" ? "Server error" : (data?.message || "Request failed")
         );
     }
 
