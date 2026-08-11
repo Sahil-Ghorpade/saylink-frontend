@@ -13,6 +13,7 @@ import Search from "./pages/search/Search";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import SinglePost from "./pages/posts/SinglePost";
 import CreatePostPage from "./pages/posts/CreatePostPage";
+import NotFound from "./pages/notFound/NotFound";
 
 import MainLayout from "./components/layout/MainLayout";
 import NoNavbarLayout from "./components/layout/NoNavbarLayout";
@@ -95,6 +96,11 @@ function App() {
                     <Route
                         path="/messages/requests"
                         element={<ProtectedRoute><MessageRequests /></ProtectedRoute>}
+                    />
+
+                    <Route
+                        path="*"
+                        element={<NotFound />}
                     />
 
                 </Route>
